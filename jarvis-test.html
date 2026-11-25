@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JARVIS 2D Office</title>
+<style>
+body {
+  margin: 0;
+  background: #101827;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  text-align: center;
+  padding: 20px;
+  background: #17243a;
+}
+h1 { margin: 0; color: #50e3c2; }
+.office {
+  margin: 15px;
+  padding: 15px;
+  background: #1c2b42;
+  border-radius: 15px;
+}
+.room {
+  height: 210px;
+  background: #263b55;
+  border: 3px solid #405978;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.desk {
+  position: absolute;
+  bottom: 25px;
+  left: 35%;
+  width: 30%;
+  height: 35px;
+  background: #8b6849;
+  border-radius: 5px;
+}
+.employee {
+  position: absolute;
+  bottom: 55px;
+  left: 10%;
+  text-align: center;
+  animation: walk 7s linear infinite alternate;
+}
+.employee .body { font-size: 35px; }
+.employee .name {
+  font-size: 12px;
+  background: #101827;
+  padding: 4px 7px;
+  border-radius: 8px;
+}
+.e1 { animation-delay: 0s; }
+.e2 { animation-delay: -2s; }
+.e3 { animation-delay: -4s; }
+.e4 { animation-delay: -6s; }
+
+@keyframes walk {
+  0% { left: 5%; }
+  45% { left: 40%; }
+  100% { left: 78%; }
+}
+form { display: grid; gap: 10px; }
+input, select, textarea, button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+}
+textarea { min-height: 70px; }
+button {
+  background: #50e3c2;
+  color: #10251f;
+  font-weight: bold;
+  cursor: pointer;
+}
+.task {
+  background: #263b55;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+.task button { margin-top: 8px; }
+.done { color: #50e3c2; }
+small { color: #b8c9df; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JARVIS 2D OFFICE</h1>
+  <p>CEO Eko · AI Team Test</p>
+</header>
+
+<section class="office">
+  <h3>🏢 Ruang Kerja</h3>
+  <div class="room">
+    <div class="desk"></div>
+
+    <div class="employee e1">
+      <div class="body">👨‍💼</div>
+      <div class="name">Eko · CEO</div>
+    </div>
+
+    <div class="employee e2">
+      <div class="body">👨‍💻</div>
+      <div class="name">Scriptwriter</div>
+    </div>
+
+    <div class="employee e3">
+      <div class="body">🤖</div>
+      <div class="name">Prompt Engineer</div>
+    </div>
+
+    <div class="employee e4">
+      <div class="body">🎬</div>
+      <div class="name">Scene Director</div>
+    </div>
+  </div>
+  <small>Karakter bergerak otomatis di dalam kantor.</small>
+</section>
+
+<section class="office">
+  <h3>📋 Berikan Tugas</h3>
+  <form id="taskForm">
+    <input id="title" placeholder="Nama tugas" required>
+
+    <select id="employee">
+      <option>Scriptwriter</option>
+      <option>Prompt Engineer</option>
+      <option>Scene Director</option>
+      <option>Eko (CEO)</option>
+    </select>
+
+    <textarea id="instruction"
+      placeholder="Instruksi pekerjaan"></textarea>
+
+    <button type="submit">Kirim Tugas</button>
+  </form>
+</section>
+
+<section class="office">
+  <h3>🗂️ Daftar Pekerjaan</h3>
+  <div id="tasks"></div>
+</section>
+
+<script>
+const form = document.getElementById("taskForm");
+const taskList = document.getElementById("tasks");
+
+let tasks = JSON.parse(
+  localStorage.getItem("jarvisTasks") || "[]"
+);
+
+function saveTasks() {
+  localStorage.setItem(
+    "jarvisTasks",
+    JSON.stringify(tasks)
+  );
+  showTasks();
+}
+
+function showTasks() {
+  taskList.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const item = document.createElement("div");
+    item.className = "task";
+
+    const title = document.createElement("strong");
+    title.textContent = task.title;
+
+    const owner = document.createElement("p");
+    owner.textContent = "Petugas: " + task.employee;
+
+    const instruction = document.createElement("p");
+    instruction.textContent =
+      task.instruction || "Tidak ada instruksi";
+
+    const status = document.createElement("p");
+    status.className = task.done ? "done" : "";
+    status.textContent =
+      task.done ? "✅ Selesai" : "⏳ Dikerjakan";
+
+    const finish = document.createElement("button");
+    finish.textContent =
+      task.done ? "Buka kembali" : "Tandai selesai";
+    finish.onclick = () => {
+      tasks[index].done = !tasks[index].done;
+      saveTasks();
+    };
+
+    const remove = document.createElement("button");
+    remove.textContent = "Hapus tugas";
+    remove.style.background = "#e87979";
+    remove.onclick = () => {
+      tasks.splice(index, 1);
+      saveTasks();
+    };
+
+    item.append(
+      title, owner, instruction, status, finish, remove
+    );
+    taskList.appendChild(item);
+  });
+}
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  tasks.push({
+    title: document.getElementById("title").value,
+    employee: document.getElementById("employee").value,
+    instruction:
+      document.getElementById("instruction").value,
+    done: false
+  });
+
+  form.reset();
+  saveTasks();
+});
+
+showTasks();
+</script>
+
+</body>
+</html>
