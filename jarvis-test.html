@@ -4,231 +4,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JARVIS 2D Office</title>
+<title>JARVIS AI OFFICE 0.3</title>
 <style>
-body {
-  margin: 0;
-  background: #101827;
-  color: white;
-  font-family: Arial, sans-serif;
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:#edf5ff;font-family:Arial,sans-serif}
+header{padding:15px;background:#172b43;border-bottom:2px solid #3c607d;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+header h2{margin:0;color:#67dfff}
+header small{color:#b8c9dd}
+main{max-width:1100px;margin:auto;padding:12px}
+.panel{background:#1b2b43;border:1px solid #3a526e;border-radius:13px;padding:13px;margin-bottom:13px}
+h3{color:#72dfff;margin:0 0 12px}
+.office{
+position:relative;height:590px;overflow:hidden;border:8px solid #694832;border-radius:10px;
+background:
+linear-gradient(90deg,transparent 49.5%,#ffffff12 50%,transparent 50.5%),
+linear-gradient(#d8c2a4 0 67%,#92745b 67% 100%);
 }
-header {
-  text-align: center;
-  padding: 20px;
-  background: #17243a;
+.window{position:absolute;top:22px;left:5%;width:24%;height:100px;background:linear-gradient(#69b9e8,#d8f2ff);border:8px solid #65452f}
+.window:before{content:"";position:absolute;left:50%;height:100%;border-left:6px solid #65452f}
+.window:after{content:"";position:absolute;top:50%;width:100%;border-top:6px solid #65452f}
+.clock{position:absolute;top:30px;right:8%;width:65px;height:65px;border-radius:50%;background:#f5e6c9;color:#47382b;display:grid;place-items:center;font-weight:bold;border:5px solid #76563b}
+.board{position:absolute;top:35px;left:39%;width:25%;height:75px;background:#285746;border:6px solid #68472f;border-radius:4px;color:#e8f5db;text-align:center;padding:14px 3px;font-size:12px}
+.rug{position:absolute;bottom:18px;left:23%;width:54%;height:105px;background:#64798d;border:5px solid #45596d;border-radius:50%}
+.desk{position:absolute;width:25%;height:72px;background:#875b3c;border:5px solid #5a3928;border-radius:5px;box-shadow:0 9px 0 #513523;z-index:1}
+.desk:before{content:"";position:absolute;top:-54px;left:28%;width:44%;height:43px;background:#263a51;border:5px solid #b3c8d7;border-radius:5px}
+.desk:after{content:"";position:absolute;top:-42px;left:43%;width:14%;height:20px;background:#68dfff;box-shadow:0 0 10px #68dfff}
+.d1{left:4%;top:180px}.d2{left:37.5%;top:180px}.d3{right:4%;top:180px}
+.d4{left:19%;top:390px}.d5{right:19%;top:390px}
+.chair{position:absolute;width:42px;height:42px;border-radius:12px;background:#40566d;border:4px solid #25384b;z-index:2}
+.c1{left:12%;top:265px}.c2{left:45%;top:265px}.c3{right:12%;top:265px}
+.c4{left:27%;top:475px}.c5{right:27%;top:475px}
+.plant{position:absolute;bottom:15px;font-size:43px;z-index:3}
+.p1{left:3%}.p2{right:3%}
+.shelf{position:absolute;top:135px;left:38%;font-size:28px}
+.employee{position:absolute;width:100px;text-align:center;z-index:5;cursor:pointer;transform-origin:center bottom}
+.avatar{display:block;font-size:43px;filter:drop-shadow(0 4px 2px #554)}
+.name{display:inline-block;background:#15283e;color:white;padding:5px 7px;border-radius:7px;font-weight:bold;font-size:10px}
+.job{display:block;color:#243c51;font-weight:bold;font-size:10px;margin-top:3px}
+.e1{left:4%;top:275px}
+.e2{left:37%;top:275px}
+.e3{right:4%;top:275px}
+.e4{left:19%;top:485px}
+.e5{right:19%;top:485px}
+.employee.working .avatar{animation:typing .65s infinite alternate}
+.employee.walking{animation:walking 1.7s ease-in-out infinite alternate}
+.employee.walking .avatar{animation:steps .25s infinite alternate}
+@keyframes typing{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-7px) rotate(5deg)}}
+@keyframes walking{from{translate:-12px 0}to{translate:12px 0}}
+@keyframes steps{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
+.employee.talking .avatar{animation:talking .45s infinite alternate}
+@keyframes talking{from{transform:scale(1)}to{transform:scale(1.12) translateY(-3px)}}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+button{background:#176b94;color:white;border:0;padding:11px 13px;border-radius:8px;font-weight:bold}
+button.alt{background:#465a75}
+button:active{transform:scale(.96)}
+input{width:100%;padding:12px;background:#101e30;border:1px solid #506a86;border-radius:8px;color:white;margin:6px 0}
+#log{min-height:45px;color:#c5e3f8;line-height:1.5}
+.status{color:#79e5ae}
+@media(max-width:550px){
+.office{height:550px}
+.desk{width:28%;height:60px}
+.d1{left:1%}.d2{left:36%}.d3{right:1%}
+.d4{left:14%;top:365px}.d5{right:14%;top:365px}
+.e1{left:0;top:250px}.e2{left:35%;top:250px}.e3{right:0;top:250px}
+.e4{left:12%;top:455px}.e5{right:12%;top:455px}
+.employee{width:85px}
+.avatar{font-size:35px}
+.name{font-size:9px}
+.job{font-size:9px}
+.c1{left:10%}.c2{left:44%}.c3{right:10%}
+.c4{left:25%;top:445px}.c5{right:25%;top:445px}
+.board{font-size:10px}
 }
-h1 { margin: 0; color: #50e3c2; }
-.office {
-  margin: 15px;
-  padding: 15px;
-  background: #1c2b42;
-  border-radius: 15px;
-}
-.room {
-  height: 210px;
-  background: #263b55;
-  border: 3px solid #405978;
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-}
-.desk {
-  position: absolute;
-  bottom: 25px;
-  left: 35%;
-  width: 30%;
-  height: 35px;
-  background: #8b6849;
-  border-radius: 5px;
-}
-.employee {
-  position: absolute;
-  bottom: 55px;
-  left: 10%;
-  text-align: center;
-  animation: walk 7s linear infinite alternate;
-}
-.employee .body { font-size: 35px; }
-.employee .name {
-  font-size: 12px;
-  background: #101827;
-  padding: 4px 7px;
-  border-radius: 8px;
-}
-.e1 { animation-delay: 0s; }
-.e2 { animation-delay: -2s; }
-.e3 { animation-delay: -4s; }
-.e4 { animation-delay: -6s; }
-
-@keyframes walk {
-  0% { left: 5%; }
-  45% { left: 40%; }
-  100% { left: 78%; }
-}
-form { display: grid; gap: 10px; }
-input, select, textarea, button {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  font-size: 15px;
-}
-textarea { min-height: 70px; }
-button {
-  background: #50e3c2;
-  color: #10251f;
-  font-weight: bold;
-  cursor: pointer;
-}
-.task {
-  background: #263b55;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-}
-.task button { margin-top: 8px; }
-.done { color: #50e3c2; }
-small { color: #b8c9df; }
 </style>
 </head>
 <body>
-
 <header>
-  <h1>JARVIS 2D OFFICE</h1>
-  <p>CEO Eko · AI Team Test</p>
+<div>
+<h2>JARVIS AI OFFICE</h2>
+<small>Virtual Headquarters — Version 0.3</small>
+</div>
+<div class="status">● OFFICE ONLINE</div>
 </header>
+<main>
+<section class="panel">
+<h3>🏢 Ruangan Kantor Utama</h3>
+<div class="office">
+<div class="window"></div>
+<div class="board">JARVIS COMPANY<br>TEAM WORKSPACE</div>
+<div class="clock">10:30</div>
+<div class="shelf">📚 📁</div>
+<div class="rug"></div>
+<div class="desk d1"></div><div class="desk d2"></div>
+<div class="desk d3"></div><div class="desk d4"></div>
+<div class="desk d5"></div>
+<div class="chair c1"></div><div class="chair c2"></div>
+<div class="chair c3"></div><div class="chair c4"></div>
+<div class="chair c5"></div>
+<div class="plant p1">🪴</div>
+<div class="plant p2">🌴</div>
 
-<section class="office">
-  <h3>🏢 Ruang Kerja</h3>
-  <div class="room">
-    <div class="desk"></div>
-
-    <div class="employee e1">
-      <div class="body">👨‍💼</div>
-      <div class="name">Eko · CEO</div>
-    </div>
-
-    <div class="employee e2">
-      <div class="body">👨‍💻</div>
-      <div class="name">Scriptwriter</div>
-    </div>
-
-    <div class="employee e3">
-      <div class="body">🤖</div>
-      <div class="name">Prompt Engineer</div>
-    </div>
-
-    <div class="employee e4">
-      <div class="body">🎬</div>
-      <div class="name">Scene Director</div>
-    </div>
-  </div>
-  <small>Karakter bergerak otomatis di dalam kantor.</small>
+<div class="employee e1 working" id="jarvis" onclick="selectPerson('JARVIS')">
+<span class="avatar">🤖</span><span class="name">JARVIS</span><span class="job">MANAGER AI</span>
+</div>
+<div class="employee e2 working" id="researcher" onclick="selectPerson('Researcher')">
+<span class="avatar">🧑‍💻</span><span class="name">RESEARCHER</span><span class="job">RESEARCH</span>
+</div>
+<div class="employee e3 talking" id="creator" onclick="selectPerson('Creator')">
+<span class="avatar">🎨</span><span class="name">CREATOR</span><span class="job">CREATIVE</span>
+</div>
+<div class="employee e4 working" id="operator" onclick="selectPerson('Operator')">
+<span class="avatar">🧑‍🔧</span><span class="name">OPERATOR</span><span class="job">OPERATIONS</span>
+</div>
+<div class="employee e5" id="eko" onclick="selectPerson('Eko')">
+<span class="avatar">👨‍💼</span><span class="name">EKO</span><span class="job">CEO / FOUNDER</span>
+</div>
+</div>
 </section>
 
-<section class="office">
-  <h3>📋 Berikan Tugas</h3>
-  <form id="taskForm">
-    <input id="title" placeholder="Nama tugas" required>
-
-    <select id="employee">
-      <option>Scriptwriter</option>
-      <option>Prompt Engineer</option>
-      <option>Scene Director</option>
-      <option>Eko (CEO)</option>
-    </select>
-
-    <textarea id="instruction"
-      placeholder="Instruksi pekerjaan"></textarea>
-
-    <button type="submit">Kirim Tugas</button>
-  </form>
+<section class="panel">
+<h3>👥 Kendali Aktivitas Karyawan</h3>
+<div class="controls">
+<button onclick="setActivity('jarvis','working','JARVIS sedang mengelola tim')">JARVIS bekerja</button>
+<button onclick="setActivity('researcher','walking','Researcher sedang berjalan')">Researcher berjalan</button>
+<button onclick="setActivity('creator','talking','Creator sedang berdiskusi')">Creator berdiskusi</button>
+<button onclick="setActivity('operator','working','Operator sedang bekerja')">Operator bekerja</button>
+<button class="alt" onclick="allWork()">Semua bekerja</button>
+<button class="alt" onclick="allWalk()">Semua bergerak</button>
+</div>
+<p id="log">Kantor aktif. Menunggu instruksi CEO Eko.</p>
 </section>
 
-<section class="office">
-  <h3>🗂️ Daftar Pekerjaan</h3>
-  <div id="tasks"></div>
+<section class="panel">
+<h3>🎛️ PANEL PERINTAH CEO</h3>
+<input id="task" placeholder="Tulis instruksi untuk JARVIS...">
+<div class="controls">
+<button onclick="sendTask()">Kirim Perintah</button>
+<button class="alt" onclick="clearTask()">Bersihkan</button>
+</div>
+<p><small>Contoh: JARVIS, lakukan riset peluang bisnis digital.</small></p>
 </section>
 
+<section class="panel">
+<h3>📊 Status Kantor</h3>
+<p>Visual kantor: <span class="status">Aktif</span></p>
+<p>Karakter dan animasi: <span class="status">Aktif</span></p>
+<p>Panel perintah: <span class="status">Aktif — simulasi</span></p>
+<p>Koneksi AI sungguhan: <span style="color:#ffd17a">Belum terhubung</span></p>
+</section>
+</main>
 <script>
-const form = document.getElementById("taskForm");
-const taskList = document.getElementById("tasks");
-
-let tasks = JSON.parse(
-  localStorage.getItem("jarvisTasks") || "[]"
-);
-
-function saveTasks() {
-  localStorage.setItem(
-    "jarvisTasks",
-    JSON.stringify(tasks)
-  );
-  showTasks();
+function selectPerson(name){
+document.getElementById('log').textContent='CEO memilih '+name+'. Profil karyawan sedang ditampilkan.';
 }
-
-function showTasks() {
-  taskList.innerHTML = "";
-
-  tasks.forEach((task, index) => {
-    const item = document.createElement("div");
-    item.className = "task";
-
-    const title = document.createElement("strong");
-    title.textContent = task.title;
-
-    const owner = document.createElement("p");
-    owner.textContent = "Petugas: " + task.employee;
-
-    const instruction = document.createElement("p");
-    instruction.textContent =
-      task.instruction || "Tidak ada instruksi";
-
-    const status = document.createElement("p");
-    status.className = task.done ? "done" : "";
-    status.textContent =
-      task.done ? "✅ Selesai" : "⏳ Dikerjakan";
-
-    const finish = document.createElement("button");
-    finish.textContent =
-      task.done ? "Buka kembali" : "Tandai selesai";
-    finish.onclick = () => {
-      tasks[index].done = !tasks[index].done;
-      saveTasks();
-    };
-
-    const remove = document.createElement("button");
-    remove.textContent = "Hapus tugas";
-    remove.style.background = "#e87979";
-    remove.onclick = () => {
-      tasks.splice(index, 1);
-      saveTasks();
-    };
-
-    item.append(
-      title, owner, instruction, status, finish, remove
-    );
-    taskList.appendChild(item);
-  });
+function setActivity(id,state,message){
+const person=document.getElementById(id);
+person.classList.remove('working','walking','talking');
+person.classList.add(state);
+document.getElementById('log').textContent=message+'.';
 }
-
-form.addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  tasks.push({
-    title: document.getElementById("title").value,
-    employee: document.getElementById("employee").value,
-    instruction:
-      document.getElementById("instruction").value,
-    done: false
-  });
-
-  form.reset();
-  saveTasks();
+function allWork(){
+['jarvis','researcher','creator','operator'].forEach(id=>setActivity(id,'working',''));
+document.getElementById('log').textContent='Semua karyawan mulai bekerja.';
+}
+function allWalk(){
+['jarvis','researcher','creator','operator','eko'].forEach(id=>setActivity(id,'walking',''));
+document.getElementById('log').textContent='Semua karakter sedang bergerak.';
+}
+function sendTask(){
+const input=document.getElementById('task');
+const value=input.value.trim();
+if(!value){
+document.getElementById('log').textContent='CEO, tuliskan perintah terlebih dahulu.';
+return;
+}
+document.getElementById('log').textContent='JARVIS menerima instruksi CEO: "'+value+'". Simulasi lokal — AI belum tersambung.';
+setActivity('jarvis','talking','JARVIS menerima perintah');
+input.value='';
+}
+function clearTask(){
+document.getElementById('task').value='';
+document.getElementById('log').textContent='Kolom perintah dibersihkan.';
+}
+document.getElementById('task').addEventListener('keydown',function(e){
+if(e.key==='Enter')sendTask();
 });
-
-showTasks();
 </script>
-
 </body>
 </html>
